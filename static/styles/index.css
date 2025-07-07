@@ -1,0 +1,111 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    /** Base colors */
+    --clr-dark-a0: #000000;
+    --clr-light-a0: #ffffff;
+
+    /** Theme primary colors */
+    --clr-primary-a0: #8be5ad;
+    --clr-primary-a10: #99e8b6;
+    --clr-primary-a20: #a7ebbf;
+    --clr-primary-a30: #b4eec8;
+    --clr-primary-a40: #c1f1d1;
+    --clr-primary-a50: #cef4da;
+
+    /** Theme surface colors */
+    --clr-surface-a0: #121212;
+    --clr-surface-a10: #282828;
+    --clr-surface-a20: #3f3f3f;
+    --clr-surface-a30: #575757;
+    --clr-surface-a40: #717171;
+    --clr-surface-a50: #8b8b8b;
+
+    /** Theme tonal surface colors */
+    --clr-surface-tonal-a0: #1e2420;
+    --clr-surface-tonal-a10: #333835;
+    --clr-surface-tonal-a20: #494e4b;
+    --clr-surface-tonal-a30: #606562;
+    --clr-surface-tonal-a40: #797d7a;
+    --clr-surface-tonal-a50: #929593;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100dvh;
+    background-color: var(--clr-surface-a0);
+}
+
+.navbar {
+    padding: 1.5rem;
+}
+
+.prediction-output {
+    display: flex;
+    flex: 1;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    /* padding: 1.25rem; */
+}
+
+.text-input-wrapper {
+    border-radius: 12px;
+    background-color: var(--clr-surface-a10);
+}
+
+.text-input {
+    width: 60vw;
+    outline: none;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: transparent;
+    border: var(--clr-surface-a10);
+    font-size: 18px;
+    color: white;
+}
+
+.text-input::placeholder {
+    color: var(--clr-surface-a50);
+    opacity: 1;
+}
+
+.text-input::-ms-input-placeholder {
+    color: var(--clr-surface-a50);
+}
+
+.predict-btn {
+    display: block;
+    background-color: var(--clr-primary-a20);
+    color: var(--clr-dark-a0);
+    padding: 15px;
+    border-radius: 12px;
+    border: var(--clr-primary-a20);
+    cursor: pointer;
+}
+
+.more-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.8rem;
+    gap: 10px;
+}
+
+.more-info > a {
+    color: var(--clr-primary-a20);
+    text-decoration: none;
+}
+
+.more-info > a:hover {
+    text-decoration: underline;
+}

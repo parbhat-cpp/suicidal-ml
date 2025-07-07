@@ -1,11 +1,45 @@
-from fastapi import FastAPI
+import sys
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse,JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from uvicorn import run as app_run
+
+import numpy as np
+
+from src.exception import CustomException
+from src.logger import logging
+from src.utils.main_utils import get_models_path,load_object,preprocess_text,avg_word2vec
+from src.models import PredictionRequest
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates")
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def homepage(request: Request):
+    return templates.TemplateResponse(request, 'index.html')
+
+@app.post("/predict-mental-health")
+async def predict(request: Request, pred_body: PredictionRequest):
+    try:
+        text = pred_body.text
+        
+        word2vec_model_path,classifier_model_path = get_models_path()
+        
+        word2vec_model = load_object(word2vec_model_path)
+        classifier_model = load_object(classifier_model_path)
+        
+        text = preprocess_text(text)
+        text = avg_word2vec(word2vec_model, text)
+        
+        prediction = classifier_model.predict(np.array(text).reshape(1,-1))
+        
+        return JSONResponse(content={'prediction': prediction[0]})
+    except Exception as e:
+        raise CustomException(e, sys)
 
 if __name__ == '__main__':
     app_run(app, host='0.0.0.0', port=8080)

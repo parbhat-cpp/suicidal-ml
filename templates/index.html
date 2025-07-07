@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{{ url_for('static', path='/styles/index.css') }}" rel="stylesheet">
+</head>
+
+<body>
+    <main class="container">
+        <nav class="navbar">
+
+        </nav>
+        <section id="prediction-output" class="prediction-output">
+
+        </section>
+        <section class="input-container">
+            <div class="text-input-wrapper">
+                <input type="text" name="text" id="text" class="text-input" placeholder="How are you doing???">
+            </div>
+            <button id="predict-btn" class="predict-btn">
+                Predict
+            </button>
+        </section>
+        <section class="more-info">
+            <a href="/about">
+                About
+            </a>
+            <a href="/about">
+                GitHub
+            </a>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', path='/scripts/index.js') }}">
+
+    </script>
+</body>
+
+</html>
