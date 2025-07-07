@@ -12,6 +12,8 @@ from src.utils.ml_utils.classification_metrics import get_classfication_score
 
 import mlflow
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 
 class ModelTrainer:
     def __init__(self, model_trainer_config: ModelTrainerConfig, data_transformation_artifact: DataTransformationArtifact) -> None:
@@ -33,8 +35,8 @@ class ModelTrainer:
         try:
             models = {
                 "RandomForestClassifier": RandomForestClassifier(verbose=1),
-                # "LogisticRegression": LogisticRegression(verbose=1),
-                # "GaussianNB": GaussianNB(),
+                "LogisticRegression": LogisticRegression(verbose=1),
+                "GaussianNB": GaussianNB(),
             }
             
             params = {
@@ -42,11 +44,11 @@ class ModelTrainer:
                     "max_features": ["sqrt", "log2"],
                     "criterion": ['gini', 'entropy', 'log_loss'],
                 },
-                # "LogisticRegression": {
-                #     "penalty": ['elasticnet', 'l1', 'l2'],
-                #     "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
-                # },
-                # "GaussianNB": {},
+                "LogisticRegression": {
+                    "penalty": ['elasticnet', 'l1', 'l2'],
+                    "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+                },
+                "GaussianNB": {},
             }
             
             logging.info('Evaluating classification models')
