@@ -1,0 +1,18 @@
+python-dotenv
+pandas
+numpy==1.23.5
+certifi
+scikit-learn
+scipy
+dill
+PyYAML
+mlflow
+dagshub
+fastapi
+uvicorn
+gensim==4.3.3
+kaggle
+ipykernel
+nltk
+
+# -e .
