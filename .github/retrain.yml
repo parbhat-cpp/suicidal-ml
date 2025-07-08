@@ -1,0 +1,71 @@
+name: Retrain model on new commit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'main.py'
+      - 'src/**'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: run training pipeline
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          DATASET: ${{ secrets.DATASET }}
+          DATASET_NAME: ${{ secrets.DATASET_NAME }}
+        run: |
+          python main.py
+      
+      - name: verify model creation
+        run: |
+          ls -la ./models/
+          python -c "
+          import os
+          word2vec_model_path = './models/word2vec.pkl'
+          classifier_model_path = './models/model.pkl'
+          if os.path.exists(word2vec_model_path) and os.path.exists(classifier_model_path):
+            print('Models exists')
+          else:
+            print('Models does not exists')
+            exit(1)
+          "
+      
+      - name: upload model to kaggle dataset
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          cat > dataset-metadata.json << EOF
+          {
+            "title": "Suicide Detection Model",
+            "id": "${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model",
+            "licenses": [{"name": "CC0-1.0"}],
+            "keywords": ["nlp", "suicide-detection", "mental-health"]
+          }
+          EOF
+          kaggle datasets version -p ./models -m "Automated retraining on commit $(git rev-parse --short HEAD)" --dir-mode zip
+
+      - name: trigger render deployment
+        if: success()
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }} || echo "Deploy hook failed"

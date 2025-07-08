@@ -1,0 +1,54 @@
+name: Deploy to render
+
+on:
+  workflow_run:
+    workflows: ["Retrain model on new commit"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+      
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: install kaggle api
+        run: |
+          pip install kaggle
+      
+      - name: download latest model
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          python scripts/download_model.py
+      
+      - name: verify model download
+        run: |
+          if [ -d "./models/word2vec.pkl" ] && [ -d "./models/model.pkl"" ]; then
+            echo "Model downloaded successfully"
+            ls -la ./models
+          else
+            echo "Model download failed"
+            exit 1
+          fi
+      
+      - name: commit and push model files
+        run: |
+          git config --local user.email "prabhat29ps@gmail.com"
+          git config --local user.name "parbhat-cpp"
+          git add models/
+          if git diff --staged --quiet; then
+            echo "No model changes to commit"
+          else
+            git commit -m "Update model files $(date)"
+            git push
+          fi
