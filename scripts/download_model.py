@@ -2,8 +2,6 @@ import os
 import sys
 import kaggle
 
-from src.exception import CustomException
-
 def download_model_from_kaggle():
     username = os.getenv('KAGGLE_USERNAME')
     
@@ -20,4 +18,4 @@ def download_model_from_kaggle():
             for file in files:
                 print(f"Downloaded file: {os.path.join(root, file)}")
     except Exception as e:
-        raise CustomException(e, sys)
+        raise Exception(e, sys)
