@@ -15,6 +15,11 @@ os.environ['KAGGLE_USERNAME'] = str(os.getenv('KAGGLE_USERNAME'))
 os.environ['KAGGLE_KEY'] = str(os.getenv('KAGGLE_KEY'))
 
 if __name__ == '__main__':
+    """
+    Execute main.py to generate models
+    Then upload to kaggle datasets
+    After that it will be used in production
+    """
     training_pipeline_config = TrainingPipelineConfig()
     
     data_ingestion_config = DataIngestionConfig(training_pipeline_config)
