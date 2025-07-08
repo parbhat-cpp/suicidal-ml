@@ -71,8 +71,16 @@ jobs:
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
-        run: |          
-          kaggle datasets version -p ./models -m "Automated retraining on commit $(git rev-parse --short HEAD)" --dir-mode zip
+        run: |
+          echo "Checking for existing kaggle dataset"
+
+          if kaggle datasets list -p -o | grep -q "${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model"; then
+            echo "Dataset exists - creating new version"
+            kaggle datasets version -p ./models -m "Automated retraining on commit $(git rev-parse --short HEAD)" --dir-mode zip
+          else
+            echo "Dataset does not exists - creating..."
+            kaggle datasets create -p ./models --dir-mode zip
+          fi
 
       - name: trigger render deployment
         if: success()
