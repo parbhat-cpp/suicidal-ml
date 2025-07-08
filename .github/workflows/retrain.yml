@@ -7,11 +7,13 @@ on:
       - 'main.py'
       - 'src/**'
       - 'requirements.txt'
+      - '.github/**'
   workflow_dispatch:
 
 jobs:
   retrain:
     runs-on: ubuntu-latest
+    environment: github_actions
     timeout-minutes: 120
 
     steps:
