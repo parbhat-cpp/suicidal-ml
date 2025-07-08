@@ -9,7 +9,7 @@ import numpy as np
 
 from src.exception import CustomException
 from src.logger import logging
-from src.utils.main_utils import get_models_path,load_object,preprocess_text,avg_word2vec
+from src.utils.main_utils import load_object,preprocess_text,avg_word2vec
 from src.models import PredictionRequest
 
 app = FastAPI()
@@ -26,11 +26,9 @@ async def homepage(request: Request):
 async def predict(request: Request, pred_body: PredictionRequest):
     try:
         text = pred_body.text
-        
-        word2vec_model_path,classifier_model_path = get_models_path()
-        
-        word2vec_model = load_object(word2vec_model_path)
-        classifier_model = load_object(classifier_model_path)
+               
+        word2vec_model = load_object('./models/word2vec.pkl')
+        classifier_model = load_object('./models/model.pkl')
         
         text = preprocess_text(text)
         text = avg_word2vec(word2vec_model, text)

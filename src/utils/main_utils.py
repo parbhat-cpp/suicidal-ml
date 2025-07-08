@@ -77,21 +77,6 @@ def save_object(file_path, obj):
     except Exception as e:
         raise CustomException(e, sys)
 
-def get_models_path():
-    try:
-        artifacts_dir = [f"./artifacts/{dir}" for dir in os.listdir('./artifacts') if os.path.isdir(f"./artifacts/{dir}")]
-        latest_subdir = max(artifacts_dir, key=os.path.getmtime)
-
-        word2vec_model_path = f"{latest_subdir}/data_transformation/transformer/word2vec.pkl"
-        classifier_model_path = f"{latest_subdir}/model_trainer/trained_model/model.pkl"
-        
-        return (
-            word2vec_model_path,
-            classifier_model_path
-        )
-    except Exception as e:
-        raise CustomException(e, sys)
-
 def load_object(file_path: str):
     try:
         if not os.path.exists(file_path):

@@ -1,6 +1,6 @@
 import os
 import sys
-
+import shutil
 import mlflow.sklearn
 
 from src.entity.config_entity import ModelTrainerConfig
@@ -104,6 +104,16 @@ class ModelTrainer:
                 test_arr[:,-1],
             )
             model_trainer_artifact = self.model_train(x_train,y_train,x_test,y_test)
+            
+            word2vec_model_path = self.data_transformation_artifact.transformer_word2vec_file_path
+            classifier_model_path = model_trainer_artifact.trained_model_file_path
+            
+            output_models_dir = './models'
+            
+            os.makedirs(output_models_dir, exist_ok=True)
+            
+            shutil.copy(word2vec_model_path, os.path.join(output_models_dir, 'word2vec.pkl'))
+            shutil.copy(classifier_model_path, os.path.join(output_models_dir, 'model.pkl'))
             
             return model_trainer_artifact
         except Exception as e:
