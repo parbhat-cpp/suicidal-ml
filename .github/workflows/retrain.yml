@@ -61,14 +61,16 @@ jobs:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
-          cat > dataset-metadata.json << EOF
-          {
-            "title": "Suicide Detection Model",
-            "id": "${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model",
-            "licenses": [{"name": "CC0-1.0"}],
-            "keywords": ["nlp", "suicide-detection", "mental-health"]
-          }
-          EOF
+          echo "{" > dataset-metadata.json
+          echo "  \"title\": \"Suicide Detection Model\"," >> dataset-metadata.json
+          echo "  \"id\": \"${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model\"," >> dataset-metadata.json
+          echo "  \"licenses\": [{\"name\": \"CC0-1.0\"}]," >> dataset-metadata.json
+          echo "  \"keywords\": [\"nlp\", \"suicide-detection\", \"mental-health\"]" >> dataset-metadata.json
+          echo "}" >> dataset-metadata.json
+
+          ls -la
+          cat dataset-metadata.json
+          
           kaggle datasets version -p ./models -m "Automated retraining on commit $(git rev-parse --short HEAD)" --dir-mode zip
 
       - name: trigger render deployment
