@@ -67,5 +67,5 @@ predictBtn.addEventListener('click', async function () {
         `;
     }
 
-    userTextInput.value = '';
+    document.getElementById('text').value = '';
 });
