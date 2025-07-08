@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from src.components.data_ingestion import DataIngestion
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
@@ -5,6 +8,11 @@ from src.entity.config_entity import TrainingPipelineConfig
 from src.entity.config_entity import DataIngestionConfig
 from src.entity.config_entity import DataTransformationConfig
 from src.entity.config_entity import ModelTrainerConfig
+
+load_dotenv()
+
+os.environ['KAGGLE_USERNAME'] = str(os.getenv('KAGGLE_USERNAME'))
+os.environ['KAGGLE_KEY'] = str(os.getenv('KAGGLE_KEY'))
 
 if __name__ == '__main__':
     training_pipeline_config = TrainingPipelineConfig()
