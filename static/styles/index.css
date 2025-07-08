@@ -1,6 +1,7 @@
 * {
     padding: 0;
     margin: 0;
+    font-family: 'Roboto Mono', sans-serif;
 }
 
 :root {
@@ -41,13 +42,13 @@
     background-color: var(--clr-surface-a0);
 }
 
-.navbar {
-    padding: 1.5rem;
-}
-
 .prediction-output {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
+    padding: 1.75rem;
+    text-align: center;
 }
 
 .input-container {
@@ -55,7 +56,6 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    /* padding: 1.25rem; */
 }
 
 .text-input-wrapper {
@@ -72,6 +72,12 @@
     border: var(--clr-surface-a10);
     font-size: 18px;
     color: white;
+}
+
+@media only screen and (max-width: 430px) {
+    .text-input {
+        padding: 15px;
+    }
 }
 
 .text-input::placeholder {
@@ -108,4 +114,39 @@
 
 .more-info > a:hover {
     text-decoration: underline;
+}
+
+.loader {
+    border: 10px solid var(--clr-primary-a10);
+    border-radius: 50%;
+    border-top: 10px solid var(--clr-surface-a30);
+    width: 75px;
+    height: 75px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.prediction {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--clr-primary-a0);
+    gap: 10px;
+}
+
+.prediction > p {
+    color: var(--clr-light-a0);
 }

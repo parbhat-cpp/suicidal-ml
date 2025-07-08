@@ -4,17 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Suicidal Detection</title>
     <link href="{{ url_for('static', path='/styles/index.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <main class="container">
-        <nav class="navbar">
-
-        </nav>
         <section id="prediction-output" class="prediction-output">
-
+            <div class="prediction">
+                <h1>🔍 Awaiting Input...</h1>
+                <p>Type something you're feeling, and we'll analyze it for signs of distress.</p>
+            </div>
         </section>
         <section class="input-container">
             <div class="text-input-wrapper">
@@ -25,10 +28,10 @@
             </button>
         </section>
         <section class="more-info">
-            <a href="/about">
+            <a href="https://parbhatsharma.vercel.app/" target="_blank">
                 About
             </a>
-            <a href="/about">
+            <a href="https://github.com/parbhat-cpp/suicidal-ml" target="_blank">
                 GitHub
             </a>
         </section>
