@@ -34,7 +34,7 @@ jobs:
       
       - name: verify model download
         run: |
-          if [ -d "./models/word2vec.pkl" ] && [ -d "./models/model.pkl"" ]; then
+          if [ -d "./models/word2vec.pkl" ] && [ -d "./models/model.pkl" ]; then
             echo "Model downloaded successfully"
             ls -la ./models
           else
