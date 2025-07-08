@@ -1,4 +1,5 @@
-const BASE_URL = window.location.href;
+let BASE_URL = window.location.href;
+BASE_URL = BASE_URL[BASE_URL.length - 1] === '/' ? BASE_URL.substring(0, BASE_URL.length - 1) : BASE_URL;
 
 const predictionOutput = document.getElementById('prediction-output');
 const predictBtn = document.getElementById('predict-btn');
@@ -58,5 +59,13 @@ predictBtn.addEventListener('click', async function () {
         }
     } else {
         alert('Prediction failed! Please try again');
+        predictionOutput.innerHTML = `
+            <div class="prediction">
+                <h1>🔍 Awaiting Input...</h1>
+                <p>Type something you're feeling, and we'll analyze it for signs of distress.</p>
+            </div>
+        `;
     }
+
+    userTextInput.value = '';
 });
