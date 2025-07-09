@@ -21,9 +21,9 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: install kaggle api
+      - name: install required packages
         run: |
-          pip install kaggle
+          pip install kaggle python-dotenv
       
       - name: download latest model
         env:
@@ -34,7 +34,7 @@ jobs:
       
       - name: verify model download
         run: |
-          if [ -d "./models/word2vec.pkl" ] && [ -d "./models/model.pkl" ]; then
+          if [ -f "./models/word2vec.pkl" ] && [ -f "./models/model.pkl" ]; then
             echo "Model downloaded successfully"
             ls -la ./models
           else
