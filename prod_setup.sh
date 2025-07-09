@@ -2,6 +2,9 @@ echo "Downloading models from kaggle..."
 
 python scripts/download_model.py
 
+echo "Setting NLTK data path..."
+export NLTK_DATA=/opt/render/nltk_data
+
 echo "Downloading NLTK resources..."
 
 python -c "
