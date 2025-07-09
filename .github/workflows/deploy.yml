@@ -41,13 +41,3 @@ jobs:
             echo "Model download failed"
             exit 1
           fi
-      
-      - name: commit and push model files
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add .
-          git commit -m "Add retrained models"
-          git push https://$GH_PAT@github.com/parbhat-cpp/suicidal-ml.git HEAD:main

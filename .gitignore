@@ -12,6 +12,9 @@ __pycache__/
 # mlflow logs and directories
 mlruns
 
+# exclude output models
+models
+
 # Distribution / packaging
 .Python
 build/
