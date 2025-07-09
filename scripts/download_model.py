@@ -1,6 +1,9 @@
 import os
 import sys
 import kaggle
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def download_model_from_kaggle():
     username = os.getenv('KAGGLE_USERNAME')
@@ -19,3 +22,6 @@ def download_model_from_kaggle():
                 print(f"Downloaded file: {os.path.join(root, file)}")
     except Exception as e:
         raise Exception(e, sys)
+
+if __name__ == '__main__':
+    download_model_from_kaggle()
