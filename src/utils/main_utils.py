@@ -7,8 +7,15 @@ from sklearn.metrics import r2_score
 from gensim.utils import simple_preprocess
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+from dotenv import load_dotenv
+import nltk
 
 from src.exception import CustomException
+
+load_dotenv()
+
+if os.getenv('APP_ENV') == 'production':
+    nltk.data.path.insert(0, os.getenv('NLTK_DATA_PATH_RENDER'))
 
 def preprocess_text(text):
     lemmatizer = WordNetLemmatizer()
