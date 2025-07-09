@@ -61,7 +61,7 @@ jobs:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
         run: |
             python -c "import json; json.dump({
-              'title': 'Suicide Detection Model - $(git rev-parse --short HEAD)',
+              'title': 'Suicide Detection Model',
               'id': '${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model',
               'licenses': [{'name': 'CC0-1.0'}],
               'keywords': ['nlp', 'suicide-detection', 'mental-health']
