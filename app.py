@@ -18,6 +18,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
+word2vec_model = load_object('./models/word2vec.pkl')
+classifier_model = load_object('./models/model.pkl')
+
 @app.get("/")
 async def homepage(request: Request):
     return templates.TemplateResponse(request, 'index.html')
@@ -26,9 +29,6 @@ async def homepage(request: Request):
 async def predict(request: Request, pred_body: PredictionRequest):
     try:
         text = pred_body.text
-               
-        word2vec_model = load_object('./models/word2vec.pkl')
-        classifier_model = load_object('./models/model.pkl')
         
         text = preprocess_text(text)
         text = avg_word2vec(word2vec_model, text)
