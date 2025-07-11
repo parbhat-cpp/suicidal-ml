@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy app source code
 COPY . .
 
-CMD chmod ./prod_setup.sh && ./prod_setup.sh
+RUN chmod ./prod_setup.sh && ./prod_setup.sh
 
 # Expose port (Railway auto-detects 8080 by default)
 EXPOSE 8080
