@@ -1,43 +1,91 @@
-name: Deploy to render
+name: Deployment to railway
 
 on:
-  workflow_run:
-    workflows: ["Retrain model on new commit"]
-    types: [completed]
+  push:
+    branches: [main]
+    paths:
+      - 'main.py'
+      - 'src/**'
+      - 'requirements.txt'
+      - '.github/**'
   workflow_dispatch:
 
 jobs:
-  deploy:
+  retrain:
     runs-on: ubuntu-latest
     environment: github_actions
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 120
 
     steps:
       - name: checkout code
         uses: actions/checkout@v3
       
-      - name: set up python
+      - name: setup python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
       
-      - name: install required packages
+      - name: install dependencies
         run: |
-          pip install kaggle python-dotenv
+          pip install -r requirements.txt
       
-      - name: download latest model
+      - name: download nltk data
+        run: |
+          python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+      
+      - name: run training pipeline
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+          DATASET: ${{ secrets.DATASET }}
+          DATASET_NAME: ${{ secrets.DATASET_NAME }}
+        run: |
+          python main.py
+      
+      - name: verify model creation
+        run: |
+          ls -la ./models/
+          python -c "
+          import os
+          word2vec_model_path = './models/word2vec.pkl'
+          classifier_model_path = './models/model.pkl'
+          if os.path.exists(word2vec_model_path) and os.path.exists(classifier_model_path):
+            print('Models exists')
+          else:
+            print('Models does not exists')
+            exit(1)
+          "
+      
+      - name: create dataset-metadata.json
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+            python -c "import json; json.dump({
+              'title': 'Suicide Detection Model',
+              'id': '${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model',
+              'licenses': [{'name': 'CC0-1.0'}],
+              'keywords': ['nlp', 'suicide-detection', 'mental-health']
+            }, open('./models/dataset-metadata.json', 'w'), indent=2)"
+        
+      - name: upload model to kaggle dataset
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
-          python scripts/download_model.py
-      
-      - name: verify model download
-        run: |
-          if [ -f "./models/word2vec.pkl" ] && [ -f "./models/model.pkl" ]; then
-            echo "Model downloaded successfully"
-            ls -la ./models
+          echo "Checking for existing kaggle dataset"
+
+          if kaggle datasets list -p -o | grep -q "${{ secrets.KAGGLE_USERNAME }}/suicide-detection-model"; then
+            echo "Dataset exists - creating new version"
+            kaggle datasets version -p ./models -m "Automated retraining on commit $(git rev-parse --short HEAD)" --dir-mode zip
           else
-            echo "Model download failed"
-            exit 1
+            echo "Dataset does not exists - creating..."
+            kaggle datasets create -p ./models --dir-mode zip
           fi
+
+      - name: install railway cli
+        run: npm i -g railway
+      
+      - name: deploy to railway via cli
+        run: |
+          railway login --token $RAILWAY_TOKEN
+          railway up --service suicidal-ml
