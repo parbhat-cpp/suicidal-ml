@@ -7,8 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 
 # Install dependencies with pip cache mount
-RUN --mount=type=cache,id=pip-cache,target=/root/.cache/pip \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app source code
 COPY . .
