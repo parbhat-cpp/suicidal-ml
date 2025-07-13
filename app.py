@@ -1,6 +1,4 @@
 import sys
-import os
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -16,15 +14,7 @@ from src.logger import logging
 from src.utils.main_utils import load_object,preprocess_text,avg_word2vec
 from src.models import PredictionRequest
 
-load_dotenv()
-
 app = FastAPI()
-
-# Force HTTPS in production
-if os.getenv('APP_ENV') == 'production':
-    app.add_middleware(HTTPSRedirectMiddleware)
-
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
