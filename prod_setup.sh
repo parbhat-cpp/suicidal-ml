@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Downloading models from kaggle..."
 
 python scripts/download_model.py
@@ -13,7 +15,7 @@ import os
 packages = ['stopwords', 'punkt', 'wordnet', 'omw-1.4']
 for package in packages:
     try:
-        nltk.download(package, quiet=False)
+        nltk.download(package, download_dir='/app/nltk_data', quiet=False)
         print(f'Successfully downloaded {package}')
     except Exception as e:
         print(f'Error downloading {package}: {e}')

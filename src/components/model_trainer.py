@@ -34,20 +34,20 @@ class ModelTrainer:
     def model_train(self, x_train, y_train, x_test, y_test):
         try:
             models = {
-                "RandomForestClassifier": RandomForestClassifier(verbose=1),
-                "LogisticRegression": LogisticRegression(verbose=1),
+                # "RandomForestClassifier": RandomForestClassifier(verbose=1),
+                # "LogisticRegression": LogisticRegression(verbose=1),
                 "GaussianNB": GaussianNB(),
             }
             
             params = {
-                "RandomForestClassifier": {
-                    "max_features": ["sqrt", "log2"],
-                    "criterion": ['gini', 'entropy', 'log_loss'],
-                },
-                "LogisticRegression": {
-                    "penalty": ['elasticnet', 'l1', 'l2'],
-                    "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
-                },
+                # "RandomForestClassifier": {
+                #     "max_features": ["sqrt", "log2"],
+                #     "criterion": ['gini', 'entropy', 'log_loss'],
+                # },
+                # "LogisticRegression": {
+                #     "penalty": ['elasticnet', 'l1', 'l2'],
+                #     "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+                # },
                 "GaussianNB": {},
             }
             
