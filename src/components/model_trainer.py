@@ -35,7 +35,7 @@ class ModelTrainer:
         try:
             models = {
                 # "RandomForestClassifier": RandomForestClassifier(verbose=1),
-                # "LogisticRegression": LogisticRegression(verbose=1),
+                "LogisticRegression": LogisticRegression(verbose=1),
                 "GaussianNB": GaussianNB(),
             }
             
@@ -44,10 +44,10 @@ class ModelTrainer:
                 #     "max_features": ["sqrt", "log2"],
                 #     "criterion": ['gini', 'entropy', 'log_loss'],
                 # },
-                # "LogisticRegression": {
-                #     "penalty": ['elasticnet', 'l1', 'l2'],
-                #     "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
-                # },
+                "LogisticRegression": {
+                    "penalty": ['elasticnet', 'l1', 'l2'],
+                    "solver": ['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga']
+                },
                 "GaussianNB": {},
             }
             
@@ -70,6 +70,9 @@ class ModelTrainer:
             test_classification_metric = get_classfication_score(y_test, y_test_pred)
             
             self.track_mlflow(best_model, test_classification_metric)
+            
+            print("Trained model classification report:\n", train_classification_metric)
+            print("Test model classification report:\n", test_classification_metric)
             
             model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
             os.makedirs(model_dir_path)
