@@ -1,11 +1,7 @@
 import sys
-import os
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse,JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from uvicorn import run as app_run
@@ -17,8 +13,6 @@ from src.logger import logging
 from src.utils.main_utils import load_object,preprocess_text,avg_word2vec
 from src.models import PredictionRequest
 
-load_dotenv()
-
 app = FastAPI()
 
 app.add_middleware(
@@ -29,12 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Force HTTPS in production
-if os.getenv('APP_ENV') == 'production':
-    app.add_middleware(HTTPSRedirectMiddleware)
-
-# Trust the Railway proxy
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+@app.middleware("http")
+async def force_https_urls(request: Request, call_next):
+    # Railway uses x-forwarded-proto to indicate original protocol
+    if request.headers.get("x-forwarded-proto") == "https":
+        request.scope["scheme"] = "https"
+    response = await call_next(request)
+    return response
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
