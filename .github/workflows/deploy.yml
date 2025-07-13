@@ -84,9 +84,12 @@ jobs:
 
       - name: install railway cli
         run: npm i -g @railway/cli
-      
-      - name: deploy to railway via cli
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway up --service suicidal-ml
+  deploy:
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      SVC_ID: suicidal-ml
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: railway up --service-id=${{ env.SVC_ID }}
