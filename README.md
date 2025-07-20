@@ -34,11 +34,11 @@ To run this project, you will need to add the following environment variables to
 
 `DATASET_NAME`=suicide-watch
 
-`KAGGLE_USERNAME`=<YOUR KAGGLE USERNAME>
+`KAGGLE_USERNAME`=YOUR KAGGLE USERNAME
 
-`KAGGLE_KEY`=<YOUR KAGGLE KEY>
+`KAGGLE_KEY`=YOUR KAGGLE KEY
 
-`APP_ENV`=<development | production>
+`APP_ENV`=development | production
 ## Setup & Installation
 
 ```bash
